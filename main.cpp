@@ -60,6 +60,9 @@ int main() {
     dataCompressionRatio = round(dataCompressionRatio * 100) / 100;
     std::cout << "Compression Ratio: " << dataCompressionRatio << std::endl;
 
+    cout << "---------------------" << endl;
+    cout << "Shannon conditions" << endl;
+    cout << "---------------------" << endl;
 
     // calculate channel capacity without noise
     double channelCapacityWithoutNoise = calculateChannelCapacityWithoutNoise();
@@ -97,9 +100,13 @@ int main() {
     // Group, non-systematic
     // --------------------
 
+    cout << "---------------------" << endl;
+    cout << "Group, non-systematic" << endl;
+    cout << "---------------------" << endl;
+
     // use hamming class to setMessageVector for "ZAKARIACHAOUKIZAKARIACHAOUKI"
     HammingEncoderDecoder hamming;
-    hamming.setMessageVector("ELANSGRABSELANSGRABS");
+    hamming.setMessageVector("ZAKARIACHAOUKIZAKARIACHAOUKI");
     // show message vector using getMessageVector where the output is a vector
     vector<int> messageVector = hamming.getMessageVector();
     cout << "Message Vector: ";
@@ -127,6 +134,57 @@ int main() {
         cout << i;
     }
     cout << std::endl;
+
+    // --------------------
+    // INTRODUCING ERRORS
+    // --------------------
+
+    cout << "---------------------" << endl;
+    cout << "Introducing errors" << endl;
+    cout << "---------------------" << endl;
+
+    // introduce a single error in the encoded message vector
+    hamming.introduceSingleError(3);
+    // show encoded message vector using getEncodedMessageVector where the output is a vector
+    vector<int> encodedMessageVectorWithError = hamming.getEncodedMessageVector();
+    cout << "Encoded Message Vector With Error: ";
+    for (int i : encodedMessageVectorWithError) {
+        cout << i;
+    }
+    cout << std::endl;
+    // decode encoded message vector using decodeNonSystematic
+    hamming.decodeNonSystematic();
+    // show decoded message vector using getDecodedMessageVector where the output is a vector
+    vector<int> decodedMessageVectorWithError = hamming.getDecodedMessageVector();
+    cout << "Decoded Message Vector With Error: ";
+    for (int i : decodedMessageVectorWithError) {
+        cout << i;
+    }
+    cout << std::endl;
+
+    // remove error from encoded message vector
+    hamming.removeError(3);
+
+    // introduce two errors in the encoded message vector
+    hamming.introduceTwoErrors(3, 5);
+    // show encoded message vector using getEncodedMessageVector where the output is a vector
+    vector<int> encodedMessageVectorWithTwoErrors = hamming.getEncodedMessageVector();
+    cout << "Encoded Message Vector With Two Errors: ";
+    for (int i : encodedMessageVectorWithTwoErrors) {
+        cout << i;
+    }
+    cout << std::endl;
+    // decode encoded message vector using decodeNonSystematic
+    hamming.decodeNonSystematic();
+    // show decoded message vector using getDecodedMessageVector where the output is a vector
+    vector<int> decodedMessageVectorWithTwoErrors = hamming.getDecodedMessageVector();
+    cout << "Decoded Message Vector With Two Errors: ";
+    for (int i : decodedMessageVectorWithTwoErrors) {
+        cout << i;
+    }
+    cout << std::endl;
+
+
 
 
 

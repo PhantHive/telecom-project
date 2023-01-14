@@ -98,7 +98,7 @@ public:
     void setMessageVector(string message) {
         // Insert code to set the message vector here
         for (char i : message) {
-            if (i == 'E' || i == 'A') {
+            if (i == 'A' || i == 'R') {
                 message_vector_.push_back(1);
             } else {
                 message_vector_.push_back(0);
@@ -119,7 +119,7 @@ public:
         }
     }
 
-    // Decode the codeword and write the message to the decoded_message_vector_
+    // Function to decode the codeword and write the message to the decoded_message_vector_
     void decodeNonSystematic() {
         // Insert code to decode the codeword here
         vector<int> syndrom_vector;
@@ -140,17 +140,31 @@ public:
         }
 
         if (syndrom_index == 0) {
+            //no errors
             decoded_message_vector_ = message_vector_;
         } else {
-            encoded_message_vector_[syndrom_index - 1] = (encoded_message_vector_[syndrom_index - 1] + 1) % 2;
-            for (int i = 0; i < encoded_matrix_[0].size(); i++) {
-                int sum = 0;
-                for (int j = 0; j < encoded_matrix_.size(); j++) {
-                    sum += encoded_matrix_[j][i] * encoded_message_vector_[j];
-                }
-                decoded_message_vector_.push_back(sum % 2);
+            // check if there is a single error or two errors and correct it
+            if (syndrom_index <= 3) {
+                encoded_message_vector_[syndrom_index - 1] = (encoded_message_vector_[syndrom_index - 1] + 1) % 2;
+            } else {
+                cout << "Error: more than two errors" << endl;
             }
         }
+    }
+
+    void removeError(int index) {
+        encoded_message_vector_[index] = (encoded_message_vector_[index] + 1) % 2;
+    }
+
+    // Function to introduce an error in the codeword
+    void introduceSingleError(int index) {
+        encoded_message_vector_[index] = (encoded_message_vector_[index] + 1) % 2;
+    }
+
+    // Function to introduce two errors in the codeword
+    void introduceTwoErrors(int index1, int index2) {
+        encoded_message_vector_[index1] = (encoded_message_vector_[index1] + 1) % 2;
+        encoded_message_vector_[index2] = (encoded_message_vector_[index2] + 1) % 2;
     }
 
 
