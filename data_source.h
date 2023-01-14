@@ -47,44 +47,37 @@ double calculateAverageCodeLength(vector<double> &source, vector<string> &codeWo
 }
 
 
-vector<double> calculateProbabilityOfZeroAndOne(vector<string> &codeWorths) {
-    // create vector to store the probability of zero and one
-    vector<double> probabilityOfZeroAndOne;
 
-    // create variable to store the number of zero and one
-    int numberOfZero = 0;
-    int numberOfOne = 0;
-
-    // loop over the code worths to calculate the number of zero and one
-    for (const string& codeWorth : codeWorths) {
-        for (char c : codeWorth) {
-            if (c == '0') {
-                numberOfZero++;
-            } else {
-                numberOfOne++;
-            }
-        }
+vector<double> calculateProbabilityOfZeroAndOne(vector<double> &source, vector<double>nbZero, vector<double>nbOne, double averageCodeLength) {
+    // calculate the probability of zero and one using the formula -> P0 = sum(p(x) * nbZero(x)) / averageCodeLength  and P1 = sum(p(x) * nbOne(x)) / averageCodeLength
+    double probabilityOfZero = 0;
+    double probabilityOfOne = 0;
+    for (int i = 0; i < source.size(); i++) {
+        probabilityOfZero += source[i] * nbZero[i];
+        probabilityOfOne += source[i] * nbOne[i];
     }
 
-    // calculate the probability of zero and one
-    double probabilityOfZero = (double) numberOfZero / (numberOfZero + numberOfOne);
-    double probabilityOfOne = (double) numberOfOne / (numberOfZero + numberOfOne);
+    probabilityOfZero /= averageCodeLength;
+    probabilityOfOne /= averageCodeLength;
 
-    // push the probability of zero and one to the vector
-    probabilityOfZeroAndOne.push_back(probabilityOfZero);
-    probabilityOfZeroAndOne.push_back(probabilityOfOne);
-
-    return probabilityOfZeroAndOne;
+    return {probabilityOfZero, probabilityOfOne};
 }
 
 
-double calculateSourceDataGenerationRate(vector<double> &source) {
-    // calculate the source data generation rate using the formula -> R = H(A)/(mean(p(x))*binary symbol duration)
-    double mean = 0;
-    for (double i : source) {
-        mean += i;
-    }
-    mean /= source.size();
+double calculateBinaryEntropy(vector<double> probabilityOfZeroAndOne) {
+    // calculate the binary entropy using the formula -> H(X) = -p(0) * log2(p(0)) - p(1) * log2(p(1))
+    return -probabilityOfZeroAndOne[0] * log2(probabilityOfZeroAndOne[0]) - probabilityOfZeroAndOne[1] * log2(probabilityOfZeroAndOne[1]);
+}
 
-    return calculateMaximumEntropy(source) / (mean * 1);
+double calculateDataRate(double sourceEntropy, double averageCodeLength) {
+    // symbol duration = 10
+    double Sd = 10e-9;
+    // calculate the data rate using the formula -> R = H(X) / (L * Sd)
+    cout << sourceEntropy << endl;
+    return sourceEntropy / (averageCodeLength * Sd);
+}
+
+double calculateDataCompressionRatio(double sourceEntropy, double averageCodeLength) {
+    // calculate the data compression ratio using the formula -> C = L / H(X)
+    return averageCodeLength / sourceEntropy;
 }
