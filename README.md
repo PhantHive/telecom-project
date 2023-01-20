@@ -52,12 +52,16 @@ The source given is the following:
 - [x] Source redundancy
 - [x] Average code length
 - [x] Probability of "0" and "1" symbol
-- [] Binary entropy
-- [] Source data generation rate
-- [] Compression ratio
-- [] Channel capacity without noise
-- [] Bit Error Rate (BER)
-- [] Channel Capacity with noise
+- [x] Binary entropy
+- [x] Source data generation rate
+- [x] Compression ratio
+- [x] Channel capacity without noise
+- [x] Bit Error Rate (BER)
+- [x] Channel Capacity with noise
+
+## hamming.h
+- [x] Group, non-systematic Hamming code
+- [x] Probability of uncorrectable error
 
 
 
@@ -65,3 +69,7 @@ The source given is the following:
 [langue-shield]: https://img.shields.io/badge/Language-C++-lightblue.svg?style=for-the-badge&logo=c%2B%2B
 [course-shield]: https://img.shields.io/badge/Course-Telecomunications_Theory-blue.svg?style=for-the-badge&logo=GitBook
 [school-shield]:https://img.shields.io/badge/School-RTU-midnightblue.svg?style=for-the-badge&logo=GoogleScholar
+
+## Credits
+Supervised by: Mr.GRABS and Mr.TIANHUA
+</br>Made during the course of Telecomunication Theory at RTU Latvia.

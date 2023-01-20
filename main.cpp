@@ -5,6 +5,8 @@
 #include <random>
 #include <algorithm>
 
+using namespace std;
+
 int main() {
 
     // data source is: 0.18, 0.02, 0.02, 0.13, 0.07, 0.17, 0.01, 0.2, 0.02, 0.18
@@ -22,43 +24,43 @@ int main() {
     // calculate entropy
     double entropy = calculateSourceEntropy(source);
     entropy = round(entropy * 100) / 100;
-    std::cout << "Entropy: " << entropy << std::endl;
+    cout << "Entropy: " << entropy << endl;
 
     // calculate maximum entropy for this source
     double maxEntropy = calculateMaximumEntropy(source);
     maxEntropy = round(maxEntropy * 100) / 100;
-    std::cout << "Maximum Entropy: " << maxEntropy << std::endl;
+    cout << "Maximum Entropy: " << maxEntropy << endl;
 
     // calculate redundancy
     double redundancy = calculateRedundancy(entropy, maxEntropy);
     redundancy  = round(redundancy * 100) / 100;
-    std::cout << "Redundancy: " << redundancy << std::endl;
+    cout << "Redundancy: " << redundancy << endl;
 
 
     // calculate average code length
     double averageCodeLength = calculateAverageCodeLength(source, codeWorths);
     averageCodeLength = round(averageCodeLength * 100) / 100;
-    std::cout << "Average Code Length: " << averageCodeLength << std::endl;
+    cout << "Average Code Length: " << averageCodeLength << endl;
 
     // calculate probability of zero and one
     vector<double> probabilityOfZeroAndOne = calculateProbabilityOfZeroAndOne(source, nbZero, nbOne, averageCodeLength);
-    std::cout << "Probability of Zero: " << round(probabilityOfZeroAndOne[0] * 100) / 100 << std::endl;
-    std::cout << "Probability of One: " << round(probabilityOfZeroAndOne[1] * 100) / 100 << std::endl;
+    cout << "Probability of Zero: " << round(probabilityOfZeroAndOne[0] * 100) / 100 << endl;
+    cout << "Probability of One: " << round(probabilityOfZeroAndOne[1] * 100) / 100 << endl;
 
     // calculate Binary Entropy
     double binaryEntropy = calculateBinaryEntropy(probabilityOfZeroAndOne);
     binaryEntropy = round(binaryEntropy * 100) / 100;
-    std::cout << "Binary Entropy: " << binaryEntropy << std::endl;
+    cout << "Binary Entropy: " << binaryEntropy << endl;
 
     // calculate Data Rate
     double dataRate = calculateDataRate(entropy, averageCodeLength);
     dataRate = round(dataRate * 100) / 100;
-    std::cout << "Data Rate: " << dataRate << std::endl;
+    cout << "Data Rate: " << dataRate << endl;
 
     // calculate data compression ratio
     double dataCompressionRatio = calculateDataCompressionRatio(entropy, averageCodeLength);
     dataCompressionRatio = round(dataCompressionRatio * 100) / 100;
-    std::cout << "Compression Ratio: " << dataCompressionRatio << std::endl;
+    cout << "Compression Ratio: " << dataCompressionRatio << endl;
 
     cout << "---------------------" << endl;
     cout << "Shannon conditions" << endl;
@@ -67,7 +69,7 @@ int main() {
     // calculate channel capacity without noise
     double channelCapacityWithoutNoise = calculateChannelCapacityWithoutNoise();
     channelCapacityWithoutNoise = round(channelCapacityWithoutNoise * 100) / 100;
-    std::cout << "Channel Capacity Without Noise: " << channelCapacityWithoutNoise << std::endl;
+    cout << "Channel Capacity Without Noise: " << channelCapacityWithoutNoise << endl;
 
     // --------------------
     // Errors probability with BASK modulation
@@ -75,7 +77,7 @@ int main() {
 
     // calculate error probability for BASK modulation
     double errorProbabilityForBASKModulation = calculateErrorProbabilityForBASKModulation();
-    std::cout << "Error Probability for BASK Modulation: " << errorProbabilityForBASKModulation << std::endl;
+    cout << "Error Probability for BASK Modulation: " << errorProbabilityForBASKModulation << endl;
 
 
     // --------------------
@@ -85,15 +87,15 @@ int main() {
     // calculate channel capacity with noise
     double channelCapacityWithNoise = calculateChannelCapacityWithNoise(errorProbabilityForBASKModulation);
     channelCapacityWithNoise = round(channelCapacityWithNoise * 100) / 100;
-    std::cout << "Channel Capacity With Noise BASK: " << channelCapacityWithNoise << std::endl;
+    cout << "Channel Capacity With Noise BASK: " << channelCapacityWithNoise << endl;
 
 
     // same as above using BFSK modulation
     double errorProbabilityForBFSKModulation = calculateErrorProbabilityForBFSKModulation();
-    std::cout << "Error Probability for BFSK Modulation: " << errorProbabilityForBFSKModulation << std::endl;
+    cout << "Error Probability for BFSK Modulation: " << errorProbabilityForBFSKModulation << endl;
     double channelCapacityWithNoiseBFSK = calculateChannelCapacityWithNoise(errorProbabilityForBFSKModulation);
     channelCapacityWithNoiseBFSK = round(channelCapacityWithNoiseBFSK * 100) / 100;
-    std::cout << "Channel Capacity With Noise BFSK: " << channelCapacityWithNoiseBFSK << std::endl;
+    cout << "Channel Capacity With Noise BFSK: " << channelCapacityWithNoiseBFSK << endl;
 
 
     // --------------------
@@ -113,7 +115,7 @@ int main() {
     for (int i : messageVector) {
         cout << i;
     }
-    cout << std::endl;
+    cout << endl;
 
     // encode message vector using encodeNonSystematic
     hamming.encodeNonSystematic();
@@ -123,7 +125,7 @@ int main() {
     for (int i : encodedMessageVector) {
         cout << i;
     }
-    cout << std::endl;
+    cout << endl;
 
     // decode encoded message vector using decodeNonSystematic
     hamming.decodeNonSystematic();
@@ -133,7 +135,7 @@ int main() {
     for (int i : decodedMessageVector) {
         cout << i;
     }
-    cout << std::endl;
+    cout << endl;
 
     // --------------------
     // INTRODUCING ERRORS
@@ -151,7 +153,7 @@ int main() {
     for (int i : encodedMessageVectorWithError) {
         cout << i;
     }
-    cout << std::endl;
+    cout << endl;
     // decode encoded message vector using decodeNonSystematic
     hamming.decodeNonSystematic();
     // show decoded message vector using getDecodedMessageVector where the output is a vector
@@ -160,7 +162,7 @@ int main() {
     for (int i : decodedMessageVectorWithError) {
         cout << i;
     }
-    cout << std::endl;
+    cout << endl;
 
     // remove error from encoded message vector
     hamming.removeError(3);
@@ -173,7 +175,7 @@ int main() {
     for (int i : encodedMessageVectorWithTwoErrors) {
         cout << i;
     }
-    cout << std::endl;
+    cout << endl;
     // decode encoded message vector using decodeNonSystematic
     hamming.decodeNonSystematic();
     // show decoded message vector using getDecodedMessageVector where the output is a vector
@@ -182,12 +184,17 @@ int main() {
     for (int i : decodedMessageVectorWithTwoErrors) {
         cout << i;
     }
-    cout << std::endl;
+    cout << endl;
 
 
-
-
-
+    // ------------------
+    // Probability more than 2 errors
+    // ------------------
+    int m = 27;
+    double BER = 0.0244143;
+    double prob = HammingEncoderDecoder::probMoreThan2Errors(m, BER);
+    cout << "---------------------" << endl;
+    cout << "Probability of more than 2 errors per codeword: " << prob << endl;
 
     return 0;
 }

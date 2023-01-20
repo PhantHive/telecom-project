@@ -7,68 +7,86 @@
 
 #endif //TT_PROJECT_MATRIX_H
 
+#include <utility>
 #include <vector>
 #include <iostream>
+#include <cmath>
+
+
 
 using namespace std;
 
 class HammingEncoderDecoder {
 
 private:
-    // Private member variable to store the message vector
-    vector<int> message_vector_;
-    // Private member variable to store the encoded message vector
-    vector<int> encoded_message_vector_;
     // Private member variable to store the decoded message vector
     vector<int> decoded_message_vector_;
 
     // Encoded matrix
     const vector<vector<int>> encoded_matrix_ = {
-            {1, 1, 1, 0, 0, 0, 0},
-            {1, 0, 0, 1, 1, 0, 0},
-            {0, 1, 0, 1, 0, 1, 0},
-            {1, 1, 0, 1, 0, 0, 1}
+            {1,	1,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0},
+            {1,	0,	0,	1,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0},
+            {0,	1,	0,	1,	0,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0},
+            {1,	1,	0,	1,	0,	0,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0},
+            {1,	0,	0,	0,	0,	0,	0,	1,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0},
+            {0,	1,	0,	0,	0,	0,	0,	1,	0,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0},
+            {1,	1,	0,	0,	0,	0,	0,	1,	0,	0,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0},
+            {0,	0,	0,	1,	0,	0,	0,	1,	0,	0,	0,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0},
+            {1,	0,	0,	1,	0,	0,	0,	1,	0,	0,	0,	0,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0},
+            {0,	1,	0,	1,	0,	0,	0,	1,	0,	0,	0,	0,	0,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0},
+            {1,	1,	0,	1,	0,	0,	0,	1,	0,	0,	0,	0,	0,	0,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0},
+            {1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0},
+            {0,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	0,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0},
+            {1,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	0,	0,	1,	0,	0,	0,	0,	0,	0,	0,	0},
+            {0,	0,	0,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	0,	0,	0,	1,	0,	0,	0,	0,	0,	0,	0},
+            {1,	0,	0,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	0,	0,	0,	0,	1,	0,	0,	0,	0,	0,	0},
+            {0,	1,	0,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	0,	0,	0,	0,	0,	1,	0,	0,	0,	0,	0},
+            {1,	1,	0,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	0,	0,	0,	0,	0,	0,	1,	0,	0,	0,	0},
+            {0,	0,	0,	0,	0,	0,	0,	1,	0,	0,	0,	0,	0,	0,	0,	1,	0,	0,	0,	0,	0,	0,	0,	1,	0,	0,	0},
+            {1,	0,	0,	0,	0,	0,	0,	1,	0,	0,	0,	0,	0,	0,	0,	1,	0,	0,	0,	0,	0,	0,	0,	0,	1,	0,	0},
+            {0,	1,	0,	0,	0,	0,	0,	1,	0,	0,	0,	0,	0,	0,	0,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	0},
+            {1,	1,	0,	0,	0,	0,	0,	1,	0,	0,	0,	0,	0,	0,	0,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1}
+
     };
 
     // Syndrom matrix
     const vector<vector<int>> syndrom_matrix_ = {
-//            {0, 0, 0, 0, 1},
-//            {0, 0, 0, 1, 0},
-//            {0, 0, 0, 1, 1},
-//            {0, 0, 1, 0, 0},
-//            {0, 0, 1, 0, 1},
-//            {0, 0, 1, 1, 0},
-//            {0, 0, 1, 1, 1},
-//            {0, 1, 0, 0, 0},
-//            {0, 1, 0, 0, 1},
-//            {0, 1, 0, 1, 0},
-//            {0, 1, 0, 1, 1},
-//            {0, 1, 1, 0, 0},
-//            {0, 1, 1, 0, 1},
-//            {0, 1, 1, 1, 0},
-//            {0, 1, 1, 1, 1},
-//            {1, 0, 0, 0, 0},
-//            {1, 0, 0, 0, 1},
-//            {1, 0, 0, 1, 0},
-//            {1, 0, 0, 1, 1},
-//            {1, 0, 1, 0, 0},
-//            {1, 0, 1, 0, 1},
-//            {1, 0, 1, 1, 0},
-//            {1, 0, 1, 1, 1},
-//            {1, 1, 0, 0, 0},
-//            {1, 1, 0, 0, 1},
-//            {1, 1, 0, 1, 0},
-//            {1, 1, 0, 1, 1}
-            {0, 0, 1},
-            {0, 1, 0},
-            {0, 1, 1},
-            {1, 0, 0},
-            {1, 0, 1},
-            {1, 1, 0},
-            {1, 1, 1}
+            {0, 0, 0, 0, 1},
+            {0, 0, 0, 1, 0},
+            {0, 0, 0, 1, 1},
+            {0, 0, 1, 0, 0},
+            {0, 0, 1, 0, 1},
+            {0, 0, 1, 1, 0},
+            {0, 0, 1, 1, 1},
+            {0, 1, 0, 0, 0},
+            {0, 1, 0, 0, 1},
+            {0, 1, 0, 1, 0},
+            {0, 1, 0, 1, 1},
+            {0, 1, 1, 0, 0},
+            {0, 1, 1, 0, 1},
+            {0, 1, 1, 1, 0},
+            {0, 1, 1, 1, 1},
+            {1, 0, 0, 0, 0},
+            {1, 0, 0, 0, 1},
+            {1, 0, 0, 1, 0},
+            {1, 0, 0, 1, 1},
+            {1, 0, 1, 0, 0},
+            {1, 0, 1, 0, 1},
+            {1, 0, 1, 1, 0},
+            {1, 0, 1, 1, 1},
+            {1, 1, 0, 0, 0},
+            {1, 1, 0, 0, 1},
+            {1, 1, 0, 1, 0},
+            {1, 1, 0, 1, 1}
+
     };
 
 
+protected:
+// Private member variable to store the message vector
+vector<int> message_vector_;
+// Private member variable to store the encoded message vector
+vector<int> encoded_message_vector_;
 public:
     // Constructor for the HammingEncoderDecoder class
     HammingEncoderDecoder() = default;
@@ -104,6 +122,11 @@ public:
                 message_vector_.push_back(0);
             }
         }
+    }
+
+    void setDecodedMessageVector(vector<int> decoded_message_vector) {
+        // Insert code to set the decoded message vector here
+        decoded_message_vector_ = move(decoded_message_vector);
     }
 
 
@@ -150,7 +173,27 @@ public:
                 cout << "Error: more than two errors" << endl;
             }
         }
+
+
     }
+
+    static double comb(int m, int i) {
+        // C(m, i) = m! / (i! * (m-i)!)
+        // Using the factorial function to calculate the numerator and denominator
+        double numerator = 1, denominator = 1;
+        for (int j = 1; j <= i; j++) {
+            numerator *= (m - (i - j));
+            denominator *= j;
+        }
+        return numerator / denominator;
+    }
+
+    static double probMoreThan2Errors(int m, double Perr) {
+        int g = 1;
+        double Punc = 1 - pow(1 - Perr, m) - pow(Perr, g) * (1 - Perr, m - g);
+        return Punc;
+    }
+
 
     void removeError(int index) {
         encoded_message_vector_[index] = (encoded_message_vector_[index] + 1) % 2;
@@ -166,8 +209,5 @@ public:
         encoded_message_vector_[index1] = (encoded_message_vector_[index1] + 1) % 2;
         encoded_message_vector_[index2] = (encoded_message_vector_[index2] + 1) % 2;
     }
-
-
-
 
 };

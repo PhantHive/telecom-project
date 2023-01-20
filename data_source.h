@@ -73,7 +73,7 @@ double calculateDataRate(double sourceEntropy, double averageCodeLength) {
     // symbol duration = 10
     double Sd = 10e-9;
     // calculate the data rate using the formula -> R = H(X) / (L * Sd)
-    cout << sourceEntropy << endl;
+    cout << "Source entropy: " << sourceEntropy << endl;
     return sourceEntropy / (averageCodeLength * Sd);
 }
 
